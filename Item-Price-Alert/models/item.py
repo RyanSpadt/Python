@@ -7,10 +7,11 @@ from bs4 import BeautifulSoup
 class Item:
 
     # Properties of the object that we want stored.
-    def __init__(self):
-        self.url = "https://www.johnlewis.com/2020-apple-ipad-pro-11-inch-a12z-bionic-ios-wi-fi-128gb/p4949052"
-        self.tag_name = "p"
-        self.query = {"class": "price price--large"}
+    def __init__(self, url, tag_name, query):
+        self.url = url
+        self.tag_name = tag_name
+        self.query = query
+        self.price = None
 
     # Accesses object properties to obtain the price of the item we want from the website.
     def load_price(self):
@@ -25,4 +26,6 @@ class Item:
         match = pattern.search(string_price)
         found_price = match.group(1)
         without_commas = found_price.replace(",", "")
-        price = float(without_commas)
+        self.price = float(without_commas)
+        
+        return self.price
