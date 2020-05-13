@@ -16,3 +16,9 @@ class Database:
     @staticmethod
     def insert(collection: str, data: Dict) -> None:
         Database.DATABASE[collection].insert(data)
+
+    # Searches Database by query in a desired collection and returns them
+    @staticmethod
+    def find(collection: str, query: Dict) -> pymongo.cursor:
+        return Database.DATABASE[collection].find(query)
+    
