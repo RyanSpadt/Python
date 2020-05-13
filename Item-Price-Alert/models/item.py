@@ -1,20 +1,21 @@
+from typing import Dict
+from bs4 import BeautifulSoup
+
 import requests
 import re
-
-from bs4 import BeautifulSoup
 
 
 class Item:
 
     # Properties of the object that we want stored.
-    def __init__(self, url, tag_name, query):
+    def __init__(self, url: str, tag_name: str, query: Dict):
         self.url = url
         self.tag_name = tag_name
         self.query = query
         self.price = None
 
     # Accesses object properties to obtain the price of the item we want from the website.
-    def load_price(self):
+    def load_price(self) -> float:
         response = requests.get(self.url)
         content = response.content
         soup = BeautifulSoup(content, "html.parser")
