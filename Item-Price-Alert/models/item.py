@@ -3,16 +3,24 @@ from bs4 import BeautifulSoup
 
 import requests
 import re
+import uuid
 
 
 class Item:
 
     # Properties of the object that we want stored.
-    def __init__(self, url: str, tag_name: str, query: Dict):
+    def __init__(self, url: str, tag_name: str, query: Dict, _id: str = None):
         self.url = url
         self.tag_name = tag_name
         self.query = query
         self.price = None
+        self.collection = "items"
+        # if _id is None it will generate a new unique ID, if it is not none it will stay the same.
+        self._id = _id or uuid.uuid4().hex
+        
+    # Prints the string that's returned instead of the default string.
+    def __repr__(self):
+        return f"<Item {self.url}>"
 
     # Accesses object properties to obtain the price of the item we want from the website.
     def load_price(self) -> float:
@@ -30,3 +38,12 @@ class Item:
         self.price = float(without_commas)
         
         return self.price
+    
+    # Returns a Dict of our objects properties to store in our DB
+    def json(self) -> Dict:
+        return {
+            "_id": self._id,
+            "url": self.url,
+            "tag_name": self.tag_name,
+            "query": self.query
+        }
