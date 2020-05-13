@@ -50,6 +50,12 @@ class Item:
             "query": self.query
         }
     
+    # Returns an item object for each Dict returned from our collection "items" database.
+    @classmethod
+    def all(cls):
+        items_from_db = Database.find("items", {})
+        return [cls(**item) for item in items_from_db]
+    
      # Inserts our data into the collection from the json method into the database
     def save_to_db(self) -> None:
         Database.initialize()
