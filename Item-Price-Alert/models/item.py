@@ -5,6 +5,8 @@ import requests
 import re
 import uuid
 
+from common.database import Database
+
 
 class Item:
 
@@ -47,3 +49,9 @@ class Item:
             "tag_name": self.tag_name,
             "query": self.query
         }
+    
+     # Inserts our data into the collection from the json method into the database
+    def save_to_db(self) -> None:
+        Database.initialize()
+        Database.insert(self.collection, self.json())
+
