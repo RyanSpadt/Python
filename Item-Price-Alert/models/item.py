@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from bs4 import BeautifulSoup
 
 import requests
@@ -23,6 +23,15 @@ class Item:
     # Prints the string that's returned instead of the default string.
     def __repr__(self):
         return f"<Item {self.url}>"
+    
+    # Returns a Dict of our objects properties to store in our DB
+    def json(self) -> Dict:
+        return {
+            "_id": self._id,
+            "url": self.url,
+            "tag_name": self.tag_name,
+            "query": self.query
+        }
 
     # Accesses object properties to obtain the price of the item we want from the website.
     def load_price(self) -> float:
@@ -41,23 +50,20 @@ class Item:
         
         return self.price
     
-    # Returns a Dict of our objects properties to store in our DB
-    def json(self) -> Dict:
-        return {
-            "_id": self._id,
-            "url": self.url,
-            "tag_name": self.tag_name,
-            "query": self.query
-        }
-    
-    # Returns an item object for each Dict returned from our collection "items" database.
-    @classmethod
-    def all(cls):
-        items_from_db = Database.find("items", {})
-        return [cls(**item) for item in items_from_db]
-    
      # Inserts our data into the collection from the json method into the database
     def save_to_db(self) -> None:
         Database.initialize()
         Database.insert(self.collection, self.json())
+        
+    # Returns an item object for each Dict returned from our collection "items" database.
+    @classmethod
+    def all(cls) -> List:
+        items_from_db = Database.find("items", {})
+        return [cls(**item) for item in items_from_db]
+    
+    # Locates a singular object within our database by it's unique identifier var _id
+    @classmethod
+    def get_by_id(cls, _id):
+        item_json = Database.find_one("items", {"_id": _id})
+        return cls(**item_json)
 
