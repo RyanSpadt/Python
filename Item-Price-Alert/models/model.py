@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Dict, List
+from typing import List
 
 from common.database import Database
 
