@@ -15,6 +15,7 @@ class Item(Model):
 
     # Properties of the object that we want stored.
     def __init__(self, url: str, tag_name: str, query: Dict, _id: str = None):
+        super().__init__(*args, **kwargs)
         self.url = url
         self.tag_name = tag_name
         self.query = query
