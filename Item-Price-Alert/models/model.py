@@ -28,7 +28,6 @@ class Model(metaclass=ABCMeta):
 
     # Will return a set of alert objects
     # For item models call Item.all(); for alert models call Alert.all()
-    # Errors will exist inside this class because collection is not defined here but in sub classes.
     @classmethod
     def all(cls) -> List:
         elements_from_db = Database.find(cls.collection, {})
