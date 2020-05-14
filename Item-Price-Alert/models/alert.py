@@ -1,17 +1,19 @@
 import uuid
-from typing import Dict, List
+from typing import Dict
 
 from common.database import Database
 from models.item import Item
+from models.model import Model
 
 
-class Alert:
+class Alert(Model):
+    
+    collection = "alerts"
 
     def __init__(self, item_id: str, price_limit: float, _id: str = None):
         self.item_id = item_id
         self.price_limit = price_limit
         self.item = Item.get_by_id(item_id)
-        self.collection = "alerts"
         self._id = _id or uuid.uuid4().hex
 
     # Returns data in json format as a Dict, this is the information we want stored in our DB
@@ -36,9 +38,3 @@ class Alert:
     # Inserts our data into the collection defined in __init__ method in the format of the json() method
     def save_to_db(self) -> None:
         Database.insert(self.collection, self.json())
-
-    # Will return a set of alert objects
-    @classmethod
-    def all(cls) -> List:
-        alerts_from_db = Database.find("alerts", {})
-        return[cls(**alert) for alert in alerts_from_db]
