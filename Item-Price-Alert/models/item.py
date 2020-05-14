@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict
 from bs4 import BeautifulSoup
 
 import requests
@@ -6,9 +6,12 @@ import re
 import uuid
 
 from common.database import Database
+from models.model import Model
 
 
-class Item:
+class Item(Model):
+    
+    collection = "items"
 
     # Properties of the object that we want stored.
     def __init__(self, url: str, tag_name: str, query: Dict, _id: str = None):
@@ -16,7 +19,6 @@ class Item:
         self.tag_name = tag_name
         self.query = query
         self.price = None
-        self.collection = "items"
         # if _id is None it will generate a new unique ID, if it is not none it will stay the same.
         self._id = _id or uuid.uuid4().hex
         
@@ -55,12 +57,6 @@ class Item:
         Database.initialize()
         Database.insert(self.collection, self.json())
         
-    # Returns an item object for each Dict returned from our collection "items" database.
-    @classmethod
-    def all(cls) -> List:
-        items_from_db = Database.find("items", {})
-        return [cls(**item) for item in items_from_db]
-    
     # Locates a singular object within our database by it's unique identifier var _id
     @classmethod
     def get_by_id(cls, _id):
