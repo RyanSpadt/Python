@@ -2,8 +2,6 @@ from common.database import Database
 from models.alert import Alert
 
 
-Database.initialize()
-
 alerts = Alert.all()
 
 for alert in alerts:
