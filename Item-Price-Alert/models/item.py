@@ -22,10 +22,6 @@ class Item(Model):
         self.price = None
         # if _id is None it will generate a new unique ID, if it is not none it will stay the same.
         self._id = _id or uuid.uuid4().hex
-        
-    # Prints the string that's returned instead of the default string.
-    def __repr__(self):
-        return f"<Item {self.url}>"
     
     # Returns a Dict of our objects properties to store in our DB
     def json(self) -> Dict:
@@ -52,15 +48,3 @@ class Item(Model):
         self.price = float(without_commas)
         
         return self.price
-    
-     # Inserts our data into the collection from the json method into the database
-    def save_to_db(self) -> None:
-        Database.initialize()
-        Database.insert(self.collection, self.json())
-        
-    # Locates a singular object within our database by it's unique identifier var _id
-    @classmethod
-    def get_by_id(cls, _id):
-        item_json = Database.find_one("items", {"_id": _id})
-        return cls(**item_json)
-
