@@ -32,10 +32,6 @@ class Alert(Model):
 
     # Notifies the user in this case, us, when the price of the item has gone under the desired price.
     # In the future this will email the user
-    def notify_if_price_reached(self):
+    def notify_if_price_reached(self) -> None:
         if self.item.price < self.price_limit:
             print(f"item {self.item} has reached a price under {self.price_limit}. Latest price {self.item.price}")
-
-    # Inserts our data into the collection defined in __init__ method in the format of the json() method
-    def save_to_db(self) -> None:
-        Database.insert(self.collection, self.json())
