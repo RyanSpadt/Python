@@ -1,13 +1,16 @@
 from abc import ABCMeta, abstractmethod
-from typing import List
+from typing import List, Type, TypeVar
 
 from common.database import Database
+
+T = TypeVar('T', bound='Model')
 
 
 # metaclass gives this class the ability to use abstract methods.
 class Model(metaclass=ABCMeta):
     
-    collection = "models"
+    collection: str
+    _id: str
 
     def __init__(self, *args, **kwargs):
         pass
@@ -29,21 +32,21 @@ class Model(metaclass=ABCMeta):
     # Will return a set of alert objects
     # For item models call Item.all(); for alert models call Alert.all()
     @classmethod
-    def all(cls) -> List:
+    def all(cls: Type[T]) -> List[T]:
         elements_from_db = Database.find(cls.collection, {})
         return[cls(**elem) for elem in elements_from_db]
     
     # Searches database in a collection for an _id and returns that singular object
     @classmethod
-    def get_by_id(cls, _id: str):
+    def get_by_id(cls: Type[T], _id: str) -> T:
         return cls.find_one_by("_id", _id)
 
     # Returns a singular item by searching a collection by url
     @classmethod
-    def find_one_by(cls, attribute, value): # Item.find_one_by('url', 'https://blank.com
+    def find_one_by(cls: Type[T], attribute: str, value: str) -> T: # Item.find_one_by('url', 'https://blank.com
         return cls(**Database.find_one(cls.collection, {attribute: value}))
 
     # Returns a list of items by search a collection by url
     @classmethod
-    def find_many_by(cls, attribute, value):
+    def find_many_by(cls: Type[T], attribute: str, value: str) -> List[T]:
         return [cls(**elem) for elem in Database.find(cls.collection, {attribute: value})]
