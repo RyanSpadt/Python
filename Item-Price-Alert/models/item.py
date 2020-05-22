@@ -1,6 +1,6 @@
 from typing import Dict
 from bs4 import BeautifulSoup
-
+from dataclasses import dataclass, field
 import requests
 import re
 import uuid
@@ -8,19 +8,18 @@ import uuid
 from models.model import Model
 
 
+@dataclass(eq=False)
 class Item(Model):
-    
-    collection = "items"
+
+    collection: str = field(init=False, default="items")
+    url: str
+    tag_name: str
+    query: Dict
+    _id: str = field(default_factory=lambda: uuid.uuid4().hex)
 
     # Properties of the object that we want stored.
-    def __init__(self, url: str, tag_name: str, query: Dict, _id: str = None):
-        super().__init__(*args, **kwargs)
-        self.url = url
-        self.tag_name = tag_name
-        self.query = query
+    def __post_init__(self):
         self.price = None
-        # if _id is None it will generate a new unique ID, if it is not none it will stay the same.
-        self._id = _id or uuid.uuid4().hex
     
     # Returns a Dict of our objects properties to store in our DB
     def json(self) -> Dict:
