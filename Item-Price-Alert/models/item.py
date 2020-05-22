@@ -15,11 +15,8 @@ class Item(Model):
     url: str
     tag_name: str
     query: Dict
+    price: float = field(default=None)
     _id: str = field(default_factory=lambda: uuid.uuid4().hex)
-
-    # Properties of the object that we want stored.
-    def __post_init__(self):
-        self.price = None
     
     # Returns a Dict of our objects properties to store in our DB
     def json(self) -> Dict:
@@ -27,6 +24,7 @@ class Item(Model):
             "_id": self._id,
             "url": self.url,
             "tag_name": self.tag_name,
+            "price": self.price,
             "query": self.query
         }
 
