@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <header><h1>Register</h1></header>
+    <section class="register-form">
+        <form method="post"> <!-- Defining as method post because we need data from the form -->
+
+            <!-- Input for email from user -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control" type="text" id="email" name="email" placeholder="example@example.com" />
+            </div>
+
+            <!-- Input for password from user -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="text" id="password" name="password" placeholder="password" />
+            </div>
+
+            <!-- Submit button -->
+            <button class="btn btn-primary" type="submit">Create</button>
+
+        </form>
+    </section>
+
+{% endblock %}
